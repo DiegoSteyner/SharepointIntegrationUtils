@@ -1,8 +1,5 @@
-
 //Importação Harcoded caso seja necessária
-//$.getScript('./FieldsTypesNumbers.js', null);
-//$.getScript('./JavascriptFunctionsUtils.js', null);
-//$.getScript('./SharePointRestFunctions.js', null);
+//$.getScript('./SuperGenerics.js', null);
 
 /**
  * Método que cria um item em uma lista Sharepoint
@@ -435,7 +432,7 @@ function getJsonFromUrl(url, type)
 {
     var retorno = null;
     
-    getJsonData(url, type, createDefaultHeaderData(), null)
+    createAjaxCall(url, type, createDefaultHeaderData(), null)
     .done(
         function(data)
         {
