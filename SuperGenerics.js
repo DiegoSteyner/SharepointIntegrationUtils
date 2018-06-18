@@ -1,4 +1,3 @@
-
 /**
  * Método que recupera os dados de uma URL
  * 
@@ -163,7 +162,7 @@ function createDeleteHeaderData(token)
 /**
  * Método que cria um Array de dados para o Header
  * 
- * @param {Array} json 
+ * @param {Array} json Os valores a serem incluídos no header, exemplo: [{ "X-RequestDigest": token, "IF-MATCH": "*", "X-HTTP-Method": "DELETE" }]
  */
 function createHeaderData(json)
 {
