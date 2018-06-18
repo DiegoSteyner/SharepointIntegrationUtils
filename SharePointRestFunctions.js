@@ -212,6 +212,156 @@ function getListItemByID(listName, itemID)
 }
 
 /**
+ * Método que configura a visibilidade de uma coluna em determinados forms nativos
+ * 
+ * @param {String} listName O nome da lista
+ * @param {String} fieldName O Display Name do campo
+ * @param {String} formType O tipo de Form nativo sendo: display para o DisplayForm, edit para o EditForm,  new para o NewForm
+ * @param {Boolean} visibility Se True, o Campo será mostrado no Form escolhido
+ */
+function setListFieldFormVisibility(listName, fieldName, formType, visibility)
+{
+    var retorno = null;
+    var listEndpoint = Endpoints.listEndpoints;
+
+    var headerDefault = createDefaultHeaderData(ObtemTokenDeSeguranca());
+
+    var method = null;
+
+    switch(formType)
+    {
+        case 'display':{
+            method = listEndpoint.listByTitle.parameters.methodShowFieldInDisplayForm;
+            break;
+        }
+
+        case 'edit':{
+            method = listEndpoint.listByTitle.parameters.methodShowFieldInEditForm;
+            break;
+        }
+        
+        case 'new':{
+            method = listEndpoint.listByTitle.parameters.methodShowFieldInNewForm;
+            break;
+        }
+
+        default:{
+            throw "O tipo de Form selecionado é inválido, os valores válidos são [display, edit, new]";
+        }
+    }
+
+    createAjaxCall(formatUrlEndPoint(listEndpoint.listByTitle.url+listEndpoint.listByTitle.parameters.fieldByTitle, [listName, fieldName]), "GET", headerDefault, null)
+    .done(
+        function(data)
+        {
+            $.ajax({
+
+                url: formatUrlEndPoint(listEndpoint.listByTitle.url+method, [listName, data.d.Id, visibility]),
+                method: "POST", 
+                async: false,
+                cache: false,                                           
+                headers: createSimpleHeaderData(ObtemTokenDeSeguranca(), false),                                                                                                                            
+                success: function (data) 
+                {                                           
+                    retorno = data;                                   
+                },
+                error: function (data) 
+                {
+                    console.log(JSON.stringify(data));
+                    console.log(data.responseText);
+                }
+            });
+        }
+    )
+    .fail(
+        function(error)
+        { 
+            console.log(JSON.stringify(error)); 
+        }
+    );
+
+    return(retorno);
+}
+
+/**
+ * Método que deleta uma coluna da lista
+ * 
+ * @param {String} listName O nome da lista onde se deseja deletar a coluna
+ * @param {String} fieldName O Display Name do campo a ser deletado
+ */
+function listDeleteField(listName, fieldName)
+{
+    var retorno = null;
+    var listEndpoint = Endpoints.listEndpoints;
+
+    var headerSimple = createSimpleHeaderData(ObtemTokenDeSeguranca());
+    var headerDefault = createDefaultHeaderData(ObtemTokenDeSeguranca());
+
+    createAjaxCall(formatUrlEndPoint(listEndpoint.listByTitle.url+listEndpoint.listByTitle.parameters.fieldByTitle, [listName, fieldName]), "GET", headerDefault, null)
+    .done(
+        function(data)
+        {
+            $.ajax({
+
+                url: formatUrlEndPoint(listEndpoint.listByTitle.url+listEndpoint.listByTitle.parameters.methodDeleteField, [listName, data.d.Id]),
+                method: "POST", 
+                async: false,
+                cache: false,                                           
+                headers: createSimpleHeaderData(ObtemTokenDeSeguranca(), false),                                                                                                                            
+                success: function (data) 
+                {                                           
+                    retorno = data;                                   
+                },
+                error: function (data) 
+                {
+                    console.log(JSON.stringify(data));
+                    console.log(data.responseText);
+                }
+            });
+        }
+    )
+    .fail(
+        function(error)
+        { 
+            console.log(JSON.stringify(error)); 
+        }
+    );
+
+    return(retorno);
+}
+
+/**
+ * Método que retorna as configurações de um Field na Lista
+ * 
+ * @param {String} listName O nome da lista
+ * @param {String} fieldName O Display Name do campo
+ */
+function getListFieldByTitle(listName, fieldName)
+{
+    var retorno = null;
+    var listEndpoint = Endpoints.listEndpoints;
+
+    var header = createDefaultHeaderData(ObtemTokenDeSeguranca());
+    var url = formatUrlEndPoint(listEndpoint.listByTitle.url+listEndpoint.listByTitle.parameters.fieldByTitle, [listName, fieldName]);
+
+    createAjaxCall(url, "GET", header, null)
+    .done(
+        function(data)
+        {
+            retorno = data.d;
+        }
+    )
+    .fail(
+        function(error)
+        { 
+            console.log(JSON.stringify(error)); 
+        }
+    );
+
+    return(retorno);
+}
+
+/**
  * Método que retorna todas as colunas presentes em uma lista
  * 
  * @param {String} listName O nome da lista
