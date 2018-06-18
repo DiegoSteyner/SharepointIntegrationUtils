@@ -13,7 +13,12 @@ window.Endpoints = Object.freeze({
                 itemById: "/Items({2})",
                 allFields: "/Fields",
                 returnTop: "$skip={0}&$top={1}",
-                addFileInList:"/RootFolder/Files/Add(url='{2}', overwrite={3})"
+                addFileInList:"/RootFolder/Files/Add(url='{2}', overwrite={3})",
+                fieldByTitle:"/Fields/getByTitle('{0}')",
+                methodShowFieldInDisplayForm:"/Fields('{0}')/setShowInDisplayForm({1})",
+                methodShowFieldInEditForm:"/Fields('{0}')/setShowInEditForm({1})",
+                methodShowFieldInNewForm:"/Fields('{0}')/setShowInNewForm({1})",
+                methodDeleteField:"/Fields('{0}')/DeleteObject()"
             }
         }
     },
